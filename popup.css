@@ -1,0 +1,40 @@
+.container {
+    min-width: 250px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+}
+
+input,
+select {
+    width: 100%;
+    padding: 8px;
+    margin: 5px 0;
+    box-sizing: border-box;
+}
+
+.buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+button {
+    width: 48%;
+    padding: 8px;
+    cursor: pointer;
+    border: none;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+#status {
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: center;
+}

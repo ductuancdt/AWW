@@ -2,20 +2,26 @@ function delay(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
   
-function randomDelay(min = 1000, max = 300000) {
+function randomDelay(min = 1000, max = 30000) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 async function getWaxCpuUsage(accountName) {
   return new Promise((resolve, reject) => {
+    if (!chrome.runtime || !chrome.runtime.sendMessage) {
+      console.error('Extension context invalidated: chrome.runtime không khả dụng.');
+      reject(-1);
+      return;
+    }
+
     chrome.runtime.sendMessage({ type: 'get_cpu', account: accountName }, (response) => {
       if (chrome.runtime.lastError) {
         console.error('Extension error:', chrome.runtime.lastError.message);
         reject(-1);
-      } else if (response.error) {
+      } else if (response?.error) {
         console.error('Fetch error:', response.error);
         reject(-1);
-      } else {
+      } else if (response?.data?.cpu_limit) {
         const cpuUsed = response.data.cpu_limit.used;
         const cpuMax = response.data.cpu_limit.max;
         const cpuPct = ((cpuUsed / cpuMax) * 100).toFixed(2);
@@ -24,6 +30,9 @@ async function getWaxCpuUsage(accountName) {
         console.log(`CPU Max: ${cpuMax} µs`);
         console.log(`CPU Usage: ${cpuPct}%`);
         resolve(cpuPct);
+      } else {
+        console.error('Unexpected response format:', response);
+        reject(-1);
       }
     });
   });
@@ -40,18 +49,20 @@ async function autoClickButtons() {
   
     if (mineButton) {
       console.log("⛏️ Click Mine");
-      const delayMs = randomDelay();
+      const delayMs = randomDelay(30*1000, 3*60*1000);
       console.log(`⏳ Đợi ${delayMs}ms sau khi click Mine`);
       await delay(delayMs);
   
       const cpuPct = await getWaxCpuUsage('nzobg.wam');
-      if (cpuPct < 95) {
+      if (cpuPct < 99 || fistMine) {
         mineButton.click();
+        fistMine = false;
       } else {
         console.log("⏳ CPU usage is high, waiting for cooldown...");
         const cooldownMs = randomDelay(30*60*1000, 40*60*3000);
         console.log(`⏳ Đợi ${cooldownMs}ms trước khi thử lại`);
         await delay(cooldownMs);
+        window.location.reload();
       }
       
     }
@@ -86,6 +97,7 @@ async function autoClickButtons() {
 }
 
 let isRunning = false;
+let fistMine = true;
 // Quan sát thay đổi DOM để tìm nút mới xuất hiện
 let debounceTimeout;
 const observer = new MutationObserver(() => {

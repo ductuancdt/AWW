@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Auto Alien Worlds</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Auto Alien Worlds</h2>
+    <select id="scheme">
+      <option value="http">HTTP</option>
+      <option value="https">HTTPS</option>
+      <option value="socks4">SOCKS4</option>
+      <option value="socks5">SOCKS5</option>
+    </select>
+    <input id="proxyString" type="text" placeholder="IP:Port or [IPv6]:Port or with User:Pass">
+    <div class="buttons">
+      <button id="set-proxy">Set Proxy</button>
+      <button id="clear-proxy">Clear Proxy</button>
+    </div>
+    <div id="status"></div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
