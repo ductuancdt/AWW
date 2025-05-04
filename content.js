@@ -46,7 +46,6 @@ async function autoClickButtons() {
     const mineButton = [...document.querySelectorAll("button")].find(btn =>
       btn.innerText.trim().toLowerCase() === "mine"
     );
-  
     if (mineButton) {
       console.log("⛏️ Click Mine");
       const delayMs = randomDelay(30*1000, 3*60*1000);
@@ -70,7 +69,6 @@ async function autoClickButtons() {
     const submitButton = [...document.querySelectorAll("button")].find(btn =>
       btn.innerText.trim().toLowerCase() === "submit"
     );
-  
     if (submitButton) {
       console.log("📤 Click Submit");
       const delayMs = randomDelay(1000, 3000);
@@ -82,13 +80,27 @@ async function autoClickButtons() {
     const approvalButton = [...document.querySelectorAll("button")].find(btn =>
       btn.innerText.trim().toLowerCase() === "approve"
     );
-  
     if (approvalButton) {
       console.log("📤 Click approve");
       const delayMs = randomDelay(1000, 3000);
       console.log(`⏳ Đợi ${delayMs}ms sau khi click approve`);
       await delay(delayMs);
       approvalButton.click();
+    }
+  
+    const connectedButton = [...document.querySelectorAll("button")].find(btn =>
+      btn.innerText.trim().toLowerCase() === "connect"
+    );
+    if (connectedButton) {
+      console.log("📤 Click connect");
+      connectedButton.click();
+      window.location.reload();
+    }
+
+    const skipButton = document.querySelector(".ytp-ad-skip-button");
+    if (skipButton) {
+      console.log("🎯 Found 'Skip Ad' button, clicking...");
+      skipButton.click();
     }
   } finally {
     isRunning = false;
@@ -99,12 +111,8 @@ async function autoClickButtons() {
 let isRunning = false;
 let fistMine = true;
 // Quan sát thay đổi DOM để tìm nút mới xuất hiện
-let debounceTimeout;
 const observer = new MutationObserver(() => {
-  clearTimeout(debounceTimeout);
-  debounceTimeout = setTimeout(() => {
-    autoClickButtons();
-  }, 500); // chỉ gọi sau 500ms nếu không có thay đổi thêm
+  autoClickButtons();
 });
 
 // Bắt đầu theo dõi body

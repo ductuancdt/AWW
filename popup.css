@@ -38,3 +38,30 @@ button:hover {
     font-size: 14px;
     text-align: center;
 }
+
+/* Định dạng cho đèn trạng thái */
+#status-light {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Các màu cho trạng thái proxy */
+.status-green {
+    background-color: green;
+}
+
+.status-red {
+    background-color: red;
+}
+
+.status-yellow {
+    background-color: yellow;
+}
+
+.status-gray {
+    background-color: gray;
+}

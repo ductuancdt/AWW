@@ -1,4 +1,3 @@
-
 function parseProxyString(proxyString) {
   proxyString = proxyString.trim();
   if (proxyString.startsWith('[')) {
@@ -45,17 +44,42 @@ document.getElementById('clear-proxy').addEventListener('click', async () => {
     if (response.success) {
       showStatus('Proxy Cleared!', 'green');
       chrome.storage.local.remove('savedProxy');
-      document.getElementById('proxyString').value = '';
+      chrome.storage.local.remove('proxyStatus');
+      // document.getElementById('proxyString').value = '';
     }
   });
 });
 
 function showStatus(message, color) {
-  const status = document.getElementById('status');
+  const status = document.getElementById('status-message');
   status.textContent = message;
   status.style.color = color;
 }
 
+// Để cập nhật trạng thái proxy
+function updateProxyStatus() {
+  chrome.storage.local.get('proxyStatus', (result) => {
+    const status = result.proxyStatus || 'gray';
+    const statusLight = document.getElementById('status-light');
+    const statusMessage = document.getElementById('status-message');
+
+    if (status === 'green') {
+      statusLight.className = 'status-green';
+      statusMessage.textContent = 'Proxy is working properly!';
+    } else if (status === 'red') {
+      statusLight.className = 'status-red';
+      statusMessage.textContent = 'No network or proxy error.';
+    } else if (status === 'yellow') {
+      statusLight.className = 'status-yellow';
+      statusMessage.textContent = 'Proxy IP mismatch.';
+    } else {
+      statusLight.className = 'status-gray';
+      statusMessage.textContent = 'Proxy not connected.';
+    }
+  });
+}
+
+// Cập nhật trạng thái khi mở popup
 window.onload = function() {
   chrome.storage.local.get('savedProxy', (data) => {
     if (data.savedProxy) {
@@ -63,4 +87,7 @@ window.onload = function() {
       document.getElementById('scheme').value = data.savedProxy.scheme || 'http';
     }
   });
+
+  // Cập nhật trạng thái proxy mỗi khi popup được mở
+  updateProxyStatus();
 };
