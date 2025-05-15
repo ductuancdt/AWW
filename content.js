@@ -48,7 +48,7 @@ async function autoClickButtons() {
     );
     if (mineButton) {
       console.log("⛏️ Click Mine");
-      const delayMs = randomDelay(30*1000, 3*60*1000);
+      const delayMs = randomDelay(30*1000, 1.5*60*1000);
       console.log(`⏳ Đợi ${delayMs}ms sau khi click Mine`);
       await delay(delayMs);
   
@@ -88,14 +88,14 @@ async function autoClickButtons() {
       approvalButton.click();
     }
   
-    const connectedButton = [...document.querySelectorAll("button")].find(btn =>
-      btn.innerText.trim().toLowerCase() === "connect"
-    );
-    if (connectedButton) {
-      console.log("📤 Click connect");
-      connectedButton.click();
-      window.location.reload();
-    }
+    // const connectedButton = [...document.querySelectorAll("button")].find(btn =>
+    //   btn.innerText.trim().toLowerCase() === "connect"
+    // );
+    // if (connectedButton) {
+    //   console.log("📤 Click connect");
+    //   connectedButton.click();
+    //   window.location.reload();
+    // }
 
     const skipButton = document.querySelector(".ytp-ad-skip-button");
     if (skipButton) {
